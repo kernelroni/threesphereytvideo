@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Sphere Assignment</title>
+		<style>
+			body { margin: 0; 
+            background: #000000;}
+		</style>
+	</head>
+	<body>
+        <!-- https://www.youtube.com/watch?v=JjkKgv5nUPQ -->
+        <script src="js/three.js"></script>
+        <script src="js/OrbitControls.js"></script>
+
+        
+		<script>
+
+        function addSphere(scene, x, y, z) {
+            const geometry = new THREE.SphereGeometry( 10, 32, 16 );
+            var material = new THREE.MeshPhongMaterial({color: 0xFFFFFF, opacity: 1});
+            const sphere = new THREE.Mesh( geometry, material );
+            if(x){
+                sphere.position.x = x;
+            }
+            if(y){
+                sphere.position.y = y;
+            }
+            if(z){
+                sphere.position.z = z;
+            }
+
+            scene.add( sphere );                
+
+        }
+			const scene = new THREE.Scene();
+
+            // fog for scene
+            scene.fog = new THREE.FogExp2( 0xffffff, 0.009 );
+            const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+            const renderer = new THREE.WebGLRenderer({ alpha: true });
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            document.body.appendChild( renderer.domElement ); // add canvas element into dom
+
+
+            // Sphere 1  - Middle one
+            addSphere(scene, 0, 0, 0);
+
+            // Sphere 2 - Front Sphere
+            addSphere(scene, 0, 0, 50);
+
+            // Sphere 3 - Back Sphere
+            addSphere(scene, 0, 0, -50);
+
+            var light = new THREE.PointLight(0xffffff, 1,1000)
+            light.position.set(-100, -100, 100);
+            scene.add( light );
+
+
+            var light2 = new THREE.AmbientLight(0xff0000, 1, 5000)
+            light2.position.set(-100, 100, 100);
+            scene.add( light2 );
+
+
+            renderer.setClearColor( 0xffffff, 0);
+
+            renderer.render( scene, camera );
+
+            const controls = new THREE.OrbitControls( camera, renderer.domElement );
+
+            //controls.update() must be called after any manual changes to the camera's transform
+            camera.position.set( 0, 20, 100 );
+            controls.update();
+
+
+
+            function animate() {
+                requestAnimationFrame( animate );
+                renderer.render( scene, camera );
+            }
+            animate();
+
+		</script>
+	</body>
+</html>
